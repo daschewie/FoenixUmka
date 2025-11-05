@@ -9,9 +9,12 @@
     #define FORCE_INLINE
     #define UNLIKELY(x)  (x)
 #else
-    #ifdef _MSC_VER  // MSVC++ only
+    #if defined(_MSC_VER)  // MSVC++ only
         #define FORCE_INLINE __forceinline
         #define UNLIKELY(x)  (x)
+    #elif defined(__CALYPSI_TARGET_SYSTEM_A2560K__)
+    	#define FORCE_INLINE
+    	#define UNLIKELY(x) (x)
     #else
         #define FORCE_INLINE __attribute__((always_inline)) inline
         #define UNLIKELY(x)  __builtin_expect(!!(x), 0)

@@ -387,9 +387,11 @@ void *moduleGetImplLibFunc(const Module *module, const char *name)
 
 char *moduleCurFolder(char *buf, int size)
 {
-#ifdef _WIN32
+#if defined(_WIN32)
     if (GetCurrentDirectory(size, buf) == 0)
         return NULL;
+#elif defined(__CALYPSI_TARGET_SYSTEM_A2560K__)
+	return NULL;
 #else
     if (!getcwd(buf, size))
         return NULL;

@@ -203,8 +203,10 @@ void rtltime(UmkaStackSlot *params, UmkaStackSlot *result)
 
 void rtlclock(UmkaStackSlot *params, UmkaStackSlot *result)
 {
-#ifdef _WIN32
+#if defined(_WIN32)
     umkaGetResult(params, result)->realVal = (double)clock() / CLOCKS_PER_SEC;
+#elif defined(__CALYPSI_TARGET_SYSTEM_A2560K__)
+	umkaGetResult(params, result)->realVal = (double) 0.0;
 #else
     // On Linux, clock() measures per-process time and may produce wrong actual time estimates
     struct timespec t;
@@ -263,8 +265,12 @@ void rtlgetenvSandbox(UmkaStackSlot *params, UmkaStackSlot *result)
 
 void rtlsystem(UmkaStackSlot *params, UmkaStackSlot *result)
 {
+#if defined(__CALYPSI_TARGET_SYSTEM_A2560K__)
+	umkaGetResult(params, result)->intVal = 0;
+#else
     const char *command = (const char *)umkaGetParam(params, 0)->ptrVal;
     umkaGetResult(params, result)->intVal = system(command);
+#endif
 }
 
 
